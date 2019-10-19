@@ -6,7 +6,17 @@ class Customer():
 
 
 class Account():
-    pass
+    def __init__(self, customer, loans):
+        self.customer = customer
+        self.loans = loans
+
+    def calculate_account_daily_rate(self, date):
+        account_daily_rate = 0
+        for loan in self.loans:
+            if loan.is_active(date):
+                account_daily_rate += loan.daily_rate
+
+        return account_daily_rate
 
 
 class Loan():
@@ -39,6 +49,11 @@ class Loan():
             return True
         return False
 
+    def is_active(self, date):
+        if (self.start_date > date and
+                self.fully_paid is False):
+            return True
+        return False
 
 class Device():
     pass
