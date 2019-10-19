@@ -9,6 +9,8 @@ class Account():
     def __init__(self, customer, loans):
         self.customer = customer
         self.loans = loans
+        self.balance = 0
+        self.payments = []
 
     def calculate_account_daily_rate(self, date):
         account_daily_rate = 0
@@ -21,11 +23,11 @@ class Account():
 
 class Loan():
 
-    def __init__(self, amount, start_date, daily_rate, loan_payments):
+    def __init__(self, amount, start_date, daily_rate):
         self.amount = amount
         self.start_date = start_date
         self.daily_rate = daily_rate
-        self.loan_payments = loan_payments
+        self.loan_payments = []
 
     @property
     def days_to_start(self):
@@ -50,10 +52,8 @@ class Loan():
         return False
 
     def is_active(self, date):
-        if (self.start_date > date and
-                self.fully_paid is False):
-            return True
-        return False
+        return True if self.start_date < date else False
+
 
 class Device():
     pass
@@ -69,8 +69,7 @@ class LoanPayment():
     """
     LoanPayment puts part of a payment to a specific loan
     """
-    def __init__(self, payment, amount, loan, date):
-        self.payment = payment
+    def __init__(self, amount, loan, date):
         self.amount = amount
         self.loan = loan
         self.date = date
