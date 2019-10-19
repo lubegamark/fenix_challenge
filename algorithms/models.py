@@ -20,6 +20,21 @@ class Account():
 
         return account_daily_rate
 
+    def add_payment(self, payment):
+        self.payments.append(payment)
+        self.balance += payment.amount
+
+    def make_loan_payment(self, date):
+        today_rate = self.calculate_account_daily_rate(date)
+        if today_rate <= self.balance:
+            for loan in self.loans:
+                if loan.is_active(date):
+                    loan.loan_payments.append(
+                        LoanPayment(loan.daily_rate, loan, date))
+            self.balance -= today_rate
+        else:
+            print("Insufficient Funds")
+
 
 class Loan():
 
