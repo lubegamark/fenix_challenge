@@ -40,17 +40,6 @@ class Loan():
             total += loan_payment.amount
         return total
 
-    @property
-    def fully_paid(self):
-        return True if self.loan_payments_total >= self.amount else False
-
-    @property
-    def active(self):
-        if (self.start_date > datetime.datetime.now().date() and
-                self.fully_paid is False):
-            return True
-        return False
-
     def is_active(self, date):
         return True if self.start_date < date else False
 
