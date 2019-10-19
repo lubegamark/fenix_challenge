@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fenix_interview_challenge.settings')
+os.environ.setdefault(
+    'DJANGO_SETTINGS_MODULE',
+    'fenix_interview_challenge.settings')
 
 application = get_wsgi_application()

@@ -5,7 +5,9 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fenix_interview_challenge.settings')
+    os.environ.setdefault(
+        'DJANGO_SETTINGS_MODULE',
+        'fenix_interview_challenge.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
