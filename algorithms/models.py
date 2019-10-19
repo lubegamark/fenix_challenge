@@ -1,3 +1,19 @@
-from django.db import models
 
-# Create your models here.
+class Customer():
+    pass
+
+
+class Account():
+    pass
+
+
+class Loan():
+    pass
+
+
+class Device():
+    pass
+
+
+class Payment():
+    pass
