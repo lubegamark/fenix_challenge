@@ -99,3 +99,41 @@ def get_days_of_power(account, payment):
             break
     return days_of_power
 
+
+def get_days_of_power_3_loans(R1, D1, R2, D2, R3, D3, K):
+    """get_days_of_power_3_loans
+    Helper method to get the days of power for 3 loans and a payment
+
+    This method initializes the Loans, Account and Payments then calls
+    get_days_of_power. It also pretty prints the paramaters given and days of 
+    power
+    """
+    today = datetime.datetime.now().date()
+    loan1 = Loan(10000000, today + datetime.timedelta(D1), R1)
+    loan2 = Loan(10000000, today + datetime.timedelta(D2), R2)
+    loan3 = Loan(10000000, today + datetime.timedelta(D3), R3)
+
+    loans = [loan1, loan2, loan3]
+
+    mark = Customer()
+    account = Account(mark, loans)
+    payment = Payment(K, account)
+    print(
+        """
+        ***************************
+        * R1: {:<20}*
+        * D1: {:<20}*
+        * R2: {:<20}*
+        * D2: {:<20}*
+        * R3: {:<20}*
+        * D3: {:<20}*
+        * K : {:<20}*
+        * ------------------------*
+        * Days Of Power: {:<8} *
+        ***************************
+        """.format(R1, D1, R2, D2, R3, D3, K, get_days_of_power(
+            account,
+            payment
+            )
+        )
+    )
