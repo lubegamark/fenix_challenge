@@ -179,6 +179,8 @@ def get_days_of_power_3_loans(R1, D1, R2, D2, R3, D3, K):
     account = Account(mark)
     account.add_loans(loans)
     payment = Payment(K, account)
+
+    days_of_power = get_days_of_power(account, payment)
     print(
         """
         ***************************
@@ -192,9 +194,7 @@ def get_days_of_power_3_loans(R1, D1, R2, D2, R3, D3, K):
         * ------------------------*
         * Days Of Power: {:<8} *
         ***************************
-        """.format(R1, D1, R2, D2, R3, D3, K, get_days_of_power(
-            account,
-            payment
-            )
-        )
+        """.format(R1, D1, R2, D2, R3, D3, K, days_of_power)
     )
+
+    return days_of_power
