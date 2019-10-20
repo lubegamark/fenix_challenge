@@ -100,7 +100,7 @@ class Loan():
         return total
 
     def is_active(self, date):
-        return True if self.start_date < date else False
+        return True if self.start_date <= date else False
 
 
 class Device():
