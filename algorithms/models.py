@@ -67,11 +67,11 @@ class Account():
 class Loan():
     """Loan
 
-    Loan represents a debt which a customer is expected to pay back in 
+    Loan represents a debt which a customer is expected to pay back in
     installments on a daily basis
 
     amount        the total amount of the loan
-    start_date    the date when daily repayments start 
+    start_date    the date when daily repayments start
     daily_rate    amount expected to be paid on a daily basis
     loan_payments list of all payments towards this loan
     """
@@ -84,7 +84,7 @@ class Loan():
 
     @property
     def days_to_start(self):
-        """Days until this loan becomes active 
+        """Days until this loan becomes active
 
         Number of days until this payments towards it are expected to start
         """
@@ -112,7 +112,7 @@ class Device():
 
 class Payment():
     """Payment
-    A payment of money into an account. This credits the account with the 
+    A payment of money into an account. This credits the account with the
     amount specified.
 
     amount  amount paid
@@ -129,7 +129,7 @@ class LoanPayment():
     debits the Account.
 
     amount   amount put towards that loan
-    loan     the loan to which this payment is made 
+    loan     the loan to which this payment is made
     date     date when this transaction was debited to this loan and credited
              from the balance
     """
@@ -165,7 +165,7 @@ def get_days_of_power_3_loans(R1, D1, R2, D2, R3, D3, K):
     Helper method to get the days of power for 3 loans and a payment
 
     This method initializes the Loans, Account and Payments then calls
-    get_days_of_power. It also pretty prints the paramaters given and days of 
+    get_days_of_power. It also pretty prints the paramaters given and days of
     power
     """
     today = datetime.datetime.now().date()
