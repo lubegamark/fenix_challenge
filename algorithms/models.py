@@ -19,9 +19,9 @@ class Account():
     loans    list of all loans belonging to account
     payments list of all payments made to account
     """
-    def __init__(self, customer, loans):
+    def __init__(self, customer):
         self.customer = customer
-        self.loans = loans
+        self.loans = []
         self.balance = 0
         self.payments = []
 
@@ -37,7 +37,12 @@ class Account():
 
         return account_daily_rate
 
-    def add_payment(self, payment):
+    def add_loans(self, loans):
+        """Add loans to an account
+        """
+        self.loans.extend(loans)
+
+    def make_payment(self, payment):
         """Make Payment into an account
         """
         self.payments.append(payment)
@@ -137,7 +142,7 @@ class LoanPayment():
 def get_days_of_power(account, payment):
     days_of_power = 0
     current_date = datetime.datetime.now().date()
-    account.add_payment(payment)
+    account.make_payment(payment)
 
     while 1:
         today_rate = account.calculate_account_daily_rate(current_date)
@@ -171,7 +176,8 @@ def get_days_of_power_3_loans(R1, D1, R2, D2, R3, D3, K):
     loans = [loan1, loan2, loan3]
 
     mark = Customer()
-    account = Account(mark, loans)
+    account = Account(mark)
+    account.add_loans(loans)
     payment = Payment(K, account)
     print(
         """
