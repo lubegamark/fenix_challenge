@@ -2,10 +2,23 @@ import datetime
 
 
 class Customer():
+    """Customer
+
+    Customer is the primary user who has an account, owns devices, takes
+    loans, makes payment
+    """
     pass
 
 
 class Account():
+    """Account
+    An Account belonging to a Customer
+
+    The initial balance is zero.
+    customer the customer who owns the account
+    loans    list of all loans belonging to account
+    payments list of all payments made to account
+    """
     def __init__(self, customer, loans):
         self.customer = customer
         self.loans = loans
@@ -37,6 +50,16 @@ class Account():
 
 
 class Loan():
+    """Loan
+
+    Loan represents a debt which a customer is expected to pay back in 
+    installments on a daily basis
+
+    amount        the total amount of the loan
+    start_date    the date when daily repayments start 
+    daily_rate    amount expected to be paid on a daily basis
+    loan_payments list of all payments towards this loan
+    """
 
     def __init__(self, amount, start_date, daily_rate):
         self.amount = amount
@@ -60,18 +83,34 @@ class Loan():
 
 
 class Device():
+    """Device
+    A device which acts as collateral for loan
+    """
     pass
 
 
 class Payment():
+    """Payment
+    A payment of money into an account. This credits the account with the 
+    amount specified.
+
+    amount  amount paid
+    account account paid into
+    """
     def __init__(self, amount, account):
         self.amount = amount
         self.account = account
 
 
 class LoanPayment():
-    """
-    LoanPayment puts part of a payment to a specific loan
+    """LoanPayment
+    LoanPayment puts part of the account balance towards specific loan. This
+    debits the Account.
+
+    amount   amount put towards that loan
+    loan     the loan to which this payment is made 
+    date     date when this transaction was debited to this loan and credited
+             from the balance
     """
     def __init__(self, amount, loan, date):
         self.amount = amount
