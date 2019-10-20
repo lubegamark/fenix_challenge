@@ -26,6 +26,10 @@ class Account():
         self.payments = []
 
     def calculate_account_daily_rate(self, date):
+        """Calculate the total Daily Rate for all active loans in an account
+
+        Daily Rate is sum of all daily rates on that date.
+        """
         account_daily_rate = 0
         for loan in self.loans:
             if loan.is_active(date):
@@ -34,10 +38,16 @@ class Account():
         return account_daily_rate
 
     def add_payment(self, payment):
+        """Make Payment into an account
+        """
         self.payments.append(payment)
         self.balance += payment.amount
 
     def make_loan_payment(self, date):
+        """Make all Loan Payments towards all loans due on date
+
+        If balance is insufficient to clear all loans, none is paid back
+        """
         today_rate = self.calculate_account_daily_rate(date)
         if today_rate <= self.balance:
             for loan in self.loans:
@@ -69,10 +79,16 @@ class Loan():
 
     @property
     def days_to_start(self):
+        """Days until this loan becomes active 
+
+        Number of days until this payments towards it are expected to start
+        """
         return self.start_date - datetime.datetime.now().date()
 
     @property
     def loan_payments_total(self):
+        """Total of all loan payments made to this loan
+        """
         total = 0
         for loan_payment in self.loan_payments:
             total += loan_payment.amount
