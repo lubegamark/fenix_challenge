@@ -83,6 +83,48 @@ def make_momo_collection_request(momorequest_id, msisdn, amount):
     return momorequest_id
 
 
+def poll_transaction(momorequest_id):
+    callback_url = os.environ.get('MOMOPAY_CALLBACK_URL')
+    target_environment = os.environ.get('MOMOPAY_TARGET_ENVIRONMENT')
+    api_base_url = os.environ.get('MOMOPAY_BASE_URL')
+    subscription_key = os.environ.get('MOMOPAY_SUBSCRIPTION_PRIMARY_KEY')
+
+    access_token = get_access_token()
+    momo_request = MomoRequest.objects.get(id=momorequest_id)
+
+    headers = {
+        'Authorization': access_token,
+        'X-Reference-Id': str(momo_request.x_reference_id),
+        'X-Target-Environment': target_environment,
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': subscription_key,
+    }
+
+    status_url = api_base_url + "/collection/v1_0/requesttopay/{}".format(
+        momo_request.x_reference_id)
+
+    r = requests.get(
+        url=status_url,
+        headers=headers,
+    )
+
+    print(r.status_code)
+    response_data = json.loads(r.text)
+    response_data["status"]
+
+    if r.status_code == 200:
+        if response_data["status"] == 'SUCCESSFUL':
+            momo_request.status = MomoRequest.SUCCESSFUL
+        elif response_data["status"] == 'PENDING':
+            # transaction is still pending
+            pass
+        else:
+            # Any other situation means it failed
+            momo_request.status = MomoRequest.FAILED
+    momo_request.save()
+    return momorequest_id
+
+
 def get_access_token():
 
     api_base_url = os.environ.get('MOMOPAY_BASE_URL')
