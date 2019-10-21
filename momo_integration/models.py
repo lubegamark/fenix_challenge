@@ -1,4 +1,8 @@
 from django.db import models
+import os
+import requests
+import json
+from requests.auth import HTTPBasicAuth
 
 
 class MomoRequest(models.Model):
@@ -26,8 +30,55 @@ class MomoRequest(models.Model):
         make_momo_collection_request()
 
 
-def make_momo_collection_request():
-    pass
+def make_momo_collection_request(momorequest_id, msisdn, amount):
+    callback_url = os.environ.get('MOMOPAY_CALLBACK_URL')
+    target_environment = os.environ.get('MOMOPAY_TARGET_ENVIRONMENT')
+    api_base_url = os.environ.get('MOMOPAY_BASE_URL')
+    subscription_key = os.environ.get('MOMOPAY_SUBSCRIPTION_PRIMARY_KEY')
+
+    access_token = get_access_token()
+
+    headers = {
+        'Authorization': access_token,
+        'X-Callback-Url': callback_url,
+        'X-Reference-Id': str(momorequest_id),
+        'X-Target-Environment': target_environment,
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': subscription_key,
+    }
+
+    payer_message = "Payment to Fenix"
+    payee_message = "Payment from {}".format(msisdn)
+
+    request_data = {
+        "amount": amount,
+        "currency": "EUR",
+        "externalId": str(momorequest_id),
+        "payer": {
+            "partyIdType": "MSISDN",
+            "partyId": msisdn
+        },
+        "payerMessage": payer_message,
+        "payeeNote": payee_message,
+    }
+    request_json = json.dumps(request_data, separators=(',', ':'))
+
+    payment_url = api_base_url + "/requesttopay"
+
+    r = requests.post(
+        url=payment_url,
+        data=request_json,
+        headers=headers,
+    )
+
+    momo_request = MomoRequest.objects.get(id=momorequest_id)
+
+    if r.status_code != 202:
+        momo_request.status = MomoRequest.FAILED
+    else:
+        print("Request Received")
+    momo_request.save()
+    return momorequest_id
 
 
 def get_access_token():
@@ -37,7 +88,7 @@ def get_access_token():
     subscription_key = os.environ.get('MOMOPAY_SUBSCRIPTION_PRIMARY_KEY')
     api_secret_key = os.environ.get('MOMOPAY_API_SECRET')
 
-    auth=HTTPBasicAuth(
+    auth = HTTPBasicAuth(
         api_user_id,
         api_secret_key)
 
@@ -47,7 +98,7 @@ def get_access_token():
         'Ocp-Apim-Subscription-Key': subscription_key,
         }
 
-    token_url = "{}{}".format(api_base_url,'collection/token/')
+    token_url = "{}{}".format(api_base_url, 'collection/token/')
 
     r = requests.post(
         url=token_url,
