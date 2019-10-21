@@ -14,10 +14,11 @@ class MomoRequest(models.Model):
         (SUCCESSFUL, SUCCESSFUL),
         (FAILED, FAILED),
     )
-    customer = models.CharField(max_length=250,)
+    customer = models.CharField(max_length=250)
+    msisdn = models.CharField(max_length=250)
     amount = models.DecimalField(decimal_places=4, max_digits=20)
     status = models.CharField(
-        max_length=250,
+        max_length=20,
         choices=STATUS_CHOICES,
         default=PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -27,7 +28,7 @@ class MomoRequest(models.Model):
         """Initialize a momo payment after saving
         """
         super().save(*args, **kwargs)
-        make_momo_collection_request()
+        make_momo_collection_request(self.id, self.msisdn, self.amount)
 
 
 def make_momo_collection_request(momorequest_id, msisdn, amount):
