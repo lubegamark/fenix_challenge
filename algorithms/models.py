@@ -146,15 +146,15 @@ def get_days_of_power(account, payment):
 
     while 1:
         today_rate = account.calculate_account_daily_rate(current_date)
-        print("Today: {}".format(current_date))
-        print("Rate: {}".format(today_rate))
-        print("Money Left: {}".format(account.balance))
-        print("Days of Power: {}".format(days_of_power))
         if account.balance - today_rate > 0:
             account.make_loan_payment(current_date)
             if today_rate > 0:
                 days_of_power += 1
             current_date += datetime.timedelta(1)
+            print("Today: {}".format(current_date))
+            print("Rate: {}".format(today_rate))
+            print("Money Left: {}".format(account.balance))
+            print("Days of Power: {}".format(days_of_power))
         else:
             break
     return days_of_power
