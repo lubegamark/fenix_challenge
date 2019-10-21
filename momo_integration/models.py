@@ -100,7 +100,7 @@ def make_momo_collection_request(momorequest_id, msisdn, amount):
     }
     request_json = json.dumps(request_data, separators=(',', ':'))
 
-    payment_url = api_base_url + "/requesttopay"
+    payment_url = api_base_url + "/collection/v1_0/requesttopay"
 
     r = requests.post(
         url=payment_url,
