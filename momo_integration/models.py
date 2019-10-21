@@ -117,7 +117,6 @@ def make_momo_collection_request(momorequest_id, msisdn, amount):
 
 
 def poll_transaction(momorequest_id):
-    callback_url = os.environ.get('MOMOPAY_CALLBACK_URL')
     target_environment = os.environ.get('MOMOPAY_TARGET_ENVIRONMENT')
     api_base_url = os.environ.get('MOMOPAY_BASE_URL')
     subscription_key = os.environ.get('MOMOPAY_SUBSCRIPTION_PRIMARY_KEY')
@@ -156,4 +155,3 @@ def poll_transaction(momorequest_id):
             momo_request.status = MomoRequest.FAILED
     momo_request.save()
     return momorequest_id
-
