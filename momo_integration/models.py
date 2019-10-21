@@ -16,6 +16,7 @@ class MomoRequest(models.Model):
     )
     customer = models.CharField(max_length=250)
     msisdn = models.CharField(max_length=250)
+    uuid = models.UUIDField()
     amount = models.DecimalField(decimal_places=4, max_digits=20)
     status = models.CharField(
         max_length=20,
@@ -39,10 +40,12 @@ def make_momo_collection_request(momorequest_id, msisdn, amount):
 
     access_token = get_access_token()
 
+    momo_request = MomoRequest.objects.get(id=momorequest_id)
+
     headers = {
         'Authorization': access_token,
         'X-Callback-Url': callback_url,
-        'X-Reference-Id': str(momorequest_id),
+        'X-Reference-Id': str(momo_request.x_reference_id),
         'X-Target-Environment': target_environment,
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': subscription_key,
@@ -71,8 +74,6 @@ def make_momo_collection_request(momorequest_id, msisdn, amount):
         data=request_json,
         headers=headers,
     )
-
-    momo_request = MomoRequest.objects.get(id=momorequest_id)
 
     if r.status_code != 202:
         momo_request.status = MomoRequest.FAILED
